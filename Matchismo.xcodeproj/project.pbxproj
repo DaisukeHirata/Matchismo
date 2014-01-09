@@ -26,6 +26,7 @@
 		E3006A17186D24E3000B80EB /* PlayingCard.m in Sources */ = {isa = PBXBuildFile; fileRef = E3006A15186D24E3000B80EB /* PlayingCard.m */; };
 		E3006A1A186D29CE000B80EB /* PlayingCardDeck.m in Sources */ = {isa = PBXBuildFile; fileRef = E3006A19186D29CE000B80EB /* PlayingCardDeck.m */; };
 		E311B4DE186D5C1700F27289 /* CardMatchingGame.m in Sources */ = {isa = PBXBuildFile; fileRef = E311B4DD186D5C1700F27289 /* CardMatchingGame.m */; };
+		E3FAC30B187E5616003876FF /* PlayingCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = E3FAC30A187E5616003876FF /* PlayingCardView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,8 @@
 		E3006A19186D29CE000B80EB /* PlayingCardDeck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayingCardDeck.m; path = Models/PlayingCardDeck.m; sourceTree = "<group>"; };
 		E311B4DC186D5C1700F27289 /* CardMatchingGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardMatchingGame.h; path = Models/CardMatchingGame.h; sourceTree = "<group>"; };
 		E311B4DD186D5C1700F27289 /* CardMatchingGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CardMatchingGame.m; path = Models/CardMatchingGame.m; sourceTree = "<group>"; };
+		E3FAC309187E5616003876FF /* PlayingCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayingCardView.h; path = Views/PlayingCardView.h; sourceTree = "<group>"; };
+		E3FAC30A187E5616003876FF /* PlayingCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayingCardView.m; path = Views/PlayingCardView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +133,7 @@
 				E30069E5186D0EB8000B80EB /* Main.storyboard */,
 				E30069E8186D0EB8000B80EB /* CardGameViewController.h */,
 				E30069E9186D0EB8000B80EB /* CardGameViewController.m */,
+				E3FAC30C187E561E003876FF /* Views */,
 				E3006A0B186D0F65000B80EB /* Models */,
 				E30069EB186D0EB8000B80EB /* Images.xcassets */,
 				E30069DA186D0EB8000B80EB /* Supporting Files */,
@@ -183,6 +187,15 @@
 				E311B4DD186D5C1700F27289 /* CardMatchingGame.m */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		E3FAC30C187E561E003876FF /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E3FAC309187E5616003876FF /* PlayingCardView.h */,
+				E3FAC30A187E5616003876FF /* PlayingCardView.m */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -287,6 +300,7 @@
 				E3006A16186D24E3000B80EB /* Deck.m in Sources */,
 				E30069E4186D0EB8000B80EB /* CardGameAppDelegate.m in Sources */,
 				E30069EA186D0EB8000B80EB /* CardGameViewController.m in Sources */,
+				E3FAC30B187E5616003876FF /* PlayingCardView.m in Sources */,
 				E311B4DE186D5C1700F27289 /* CardMatchingGame.m in Sources */,
 				E3006A1A186D29CE000B80EB /* PlayingCardDeck.m in Sources */,
 				E30069E0186D0EB8000B80EB /* main.m in Sources */,
