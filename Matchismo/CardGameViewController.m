@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *matchModeSegmentedControl;
 @property (weak, nonatomic) IBOutlet UILabel *lastConsiderationLabel;
+@property (weak, nonatomic) IBOutlet UISlider *historySlider;
 @end
 
 @implementation CardGameViewController
@@ -40,13 +41,13 @@
                                                           usingDeck:[self createDeck]];
     return _game;
 }
-                 
+
 - (Deck *)createDeck
 {
     return [[PlayingCardDeck alloc] init];
 }
 
-- (IBAction)tapPlayingCardView:(UITapGestureRecognizer *)sender {
+- (void)tapPlayingCardView:(UITapGestureRecognizer *)sender {
     int chosenButtonIndex = [self.playingCardViews indexOfObject:sender.view];
     NSLog(@"%d tapped", chosenButtonIndex);
     [self.game chooseCardAtIndex:chosenButtonIndex];
@@ -66,6 +67,11 @@
     self.game.threeCardsMode = [self.matchModeSegmentedControl selectedSegmentIndex] == 1 ? YES : NO;
 }
 
+- (IBAction)changeHistorySlider:(UISlider *)sender {
+    self.lastConsiderationLabel.text = [self.game.considerationHistory objectAtIndex:(int)sender.value];
+    self.lastConsiderationLabel.alpha = 0.4;
+}
+
 - (void)updateUI
 {
     
@@ -75,11 +81,13 @@
         cardView.rank = card.rank;
         cardView.suit = card.suit;
         cardView.faceUp = card.isChosen;
-        //cardView.enabled = !card.isMatched;
     }
     
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
     self.lastConsiderationLabel.text = self.game.lastConsideration;
+    self.lastConsiderationLabel.alpha = 1;
+    self.historySlider.maximumValue = [self.game.considerationHistory count] - 1;
+    self.historySlider.value = self.historySlider.maximumValue;
 }
 
 - (NSString *)titleForCard:(Card *)card

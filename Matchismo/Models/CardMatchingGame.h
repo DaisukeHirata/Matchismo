@@ -21,5 +21,6 @@
 @property (nonatomic, readonly) NSInteger score;
 @property (nonatomic, getter=isThreeCardsMode) BOOL threeCardsMode;
 @property (nonatomic, readonly) NSString *lastConsideration;
+@property (strong, nonatomic) NSMutableArray *considerationHistory; // of lastConsideration
 
 @end

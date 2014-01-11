@@ -18,9 +18,35 @@
 
 - (NSMutableArray *)cards
 {
-    if (!_cards) _cards = [[NSMutableArray alloc] init];
+    if (!_cards) {
+        _cards = [[NSMutableArray alloc] init];
+    }
     return _cards;
 }
+
+- (NSMutableArray *)considerationHistory
+{
+    if ([self.cards count] == 0) {
+        _considerationHistory = nil;
+    }
+    if (!_considerationHistory) {
+        _considerationHistory = [[NSMutableArray alloc] init];
+        [_considerationHistory addObject:self.lastConsideration];
+    }
+    return _considerationHistory;
+}
+
+- (NSString *)lastConsideration
+{
+    if ([self.cards count] == 0) {
+        _lastConsideration = nil;
+    }
+    if (!_lastConsideration) {
+        _lastConsideration = [NSString stringWithFormat:@"No consideration"];
+    }
+    return _lastConsideration;
+}
+
 
 // designated initializer
 - (instancetype)initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck
@@ -87,6 +113,7 @@ static const int COST_TO_CHOOSE = 1;
                     }
                     self.lastConsideration = [NSString stringWithFormat:@"%@ does not match", consideration];
                 }
+                [self.considerationHistory addObject:self.lastConsideration];
             }
             
             self.score -= COST_TO_CHOOSE;
