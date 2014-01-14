@@ -11,14 +11,13 @@
 #import "PlayingCard.h"
 #import "CardMatchingGame.h"
 #import "PlayingCardView.h"
+#import "HistoryViewController.h"
 
 @interface CardGameViewController ()
 @property (nonatomic, strong) CardMatchingGame *game;
 @property (strong, nonatomic) IBOutletCollection(PlayingCardView) NSArray *playingCardViews;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *matchModeSegmentedControl;
 @property (weak, nonatomic) IBOutlet UILabel *lastConsiderationLabel;
-@property (weak, nonatomic) IBOutlet UISlider *historySlider;
 @end
 
 @implementation CardGameViewController
@@ -32,6 +31,20 @@
             [[UITapGestureRecognizer alloc] initWithTarget:self
                                                     action:@selector(tapPlayingCardView:)];
         [card addGestureRecognizer:recognizer];
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"show History"]) {
+        if ([segue.destinationViewController isKindOfClass:[HistoryViewController class]]) {
+            HistoryViewController *hvc = (HistoryViewController *)segue.destinationViewController;
+            NSMutableString *htext = [[NSMutableString alloc] init];
+            for (NSString *con in self.game.considerationHistory) {
+                [htext appendFormat:@"%@\n", con];
+            }
+            hvc.historyText = htext;
+        }
     }
 }
 
@@ -51,25 +64,14 @@
     int chosenButtonIndex = [self.playingCardViews indexOfObject:sender.view];
     NSLog(@"%d tapped", chosenButtonIndex);
     [self.game chooseCardAtIndex:chosenButtonIndex];
-    self.matchModeSegmentedControl.enabled = NO;
     [self updateUI];
 }
 
-- (IBAction)redealButton:(UIButton *)sender {
+- (IBAction)redealBarButton:(UIBarButtonItem *)sender {
     self.game = [[CardMatchingGame alloc] initWithCardCount:[self.playingCardViews count]
                                               usingDeck:[self createDeck]];
-    self.game.threeCardsMode = [self.matchModeSegmentedControl selectedSegmentIndex] == 1 ? YES : NO;
-    self.matchModeSegmentedControl.enabled = YES;
+    self.game.threeCardsMode = NO;
     [self updateUI];
-}
-
-- (IBAction)changeMatchModeSegmentedControl:(UISegmentedControl *)sender {
-    self.game.threeCardsMode = [self.matchModeSegmentedControl selectedSegmentIndex] == 1 ? YES : NO;
-}
-
-- (IBAction)changeHistorySlider:(UISlider *)sender {
-    self.lastConsiderationLabel.text = [self.game.considerationHistory objectAtIndex:(int)sender.value];
-    self.lastConsiderationLabel.alpha = 0.4;
 }
 
 - (void)updateUI
@@ -86,8 +88,6 @@
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
     self.lastConsiderationLabel.text = self.game.lastConsideration;
     self.lastConsiderationLabel.alpha = 1;
-    self.historySlider.maximumValue = [self.game.considerationHistory count] - 1;
-    self.historySlider.value = self.historySlider.maximumValue;
 }
 
 - (NSString *)titleForCard:(Card *)card

@@ -31,7 +31,6 @@
     }
     if (!_considerationHistory) {
         _considerationHistory = [[NSMutableArray alloc] init];
-        [_considerationHistory addObject:self.lastConsideration];
     }
     return _considerationHistory;
 }
