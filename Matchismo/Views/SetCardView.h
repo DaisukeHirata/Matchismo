@@ -6,9 +6,9 @@
 //  Copyright (c) 2014年 Daisuke Hirata. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "CardView.h"
 
-@interface SetCardView : UIView
+@interface SetCardView : CardView
 
 @property (nonatomic) NSUInteger number;
 @property (strong, nonatomic) NSString *symbol;

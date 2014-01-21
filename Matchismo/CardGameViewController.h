@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CardView.h"
+#import "CardMatchingGame.h"
 
 @interface CardGameViewController : UIViewController
+
+@property (strong, nonatomic) IBOutletCollection(CardView) NSArray *cardViews;
+@property (nonatomic, strong) CardMatchingGame *game;
+@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 
 @end

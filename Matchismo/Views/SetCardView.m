@@ -163,10 +163,8 @@
     CGPoint middle = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
     NSAttributedString *attributedSuit = [self createAttributedString];
     CGSize pipSize = [attributedSuit size];
-    CGPoint pipOrigin = CGPointMake(
-                                    middle.x-pipSize.width/2.0-hoffset*self.bounds.size.width,
-                                    middle.y-pipSize.height/2.0-voffset*self.bounds.size.height
-                                    );
+    CGPoint pipOrigin = CGPointMake( middle.x-pipSize.width/2.0-hoffset*self.bounds.size.width,
+                                     middle.y-pipSize.height/2.0-voffset*self.bounds.size.height );
     [attributedSuit drawAtPoint:pipOrigin];
     if (hoffset) {
         pipOrigin.x += hoffset*2.0*self.bounds.size.width;

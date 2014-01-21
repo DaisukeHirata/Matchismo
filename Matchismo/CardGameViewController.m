@@ -7,17 +7,9 @@
 //
 
 #import "CardGameViewController.h"
-#import "PlayingCardDeck.h"
-#import "PlayingCard.h"
-#import "CardMatchingGame.h"
-#import "PlayingCardView.h"
 #import "HistoryViewController.h"
 
 @interface CardGameViewController ()
-@property (nonatomic, strong) CardMatchingGame *game;
-@property (strong, nonatomic) IBOutletCollection(PlayingCardView) NSArray *playingCardViews;
-@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
-@property (weak, nonatomic) IBOutlet UILabel *lastConsiderationLabel;
 @end
 
 @implementation CardGameViewController
@@ -26,7 +18,7 @@
 {
     [super viewDidLoad];
 
-    for (PlayingCardView *card in self.playingCardViews) {
+    for (CardView *card in self.cardViews) {
         UITapGestureRecognizer *recognizer =
             [[UITapGestureRecognizer alloc] initWithTarget:self
                                                     action:@selector(tapPlayingCardView:)];
@@ -48,46 +40,35 @@
     }
 }
 
-- (CardMatchingGame *)game
-{
-    if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[self.playingCardViews count]
-                                                          usingDeck:[self createDeck]];
-    return _game;
-}
-
+// abstract method. must override this.
 - (Deck *)createDeck
 {
-    return [[PlayingCardDeck alloc] init];
+    return nil;
 }
 
 - (void)tapPlayingCardView:(UITapGestureRecognizer *)sender {
-    int chosenButtonIndex = [self.playingCardViews indexOfObject:sender.view];
+    int chosenButtonIndex = [self.cardViews indexOfObject:sender.view];
     NSLog(@"%d tapped", chosenButtonIndex);
     [self.game chooseCardAtIndex:chosenButtonIndex];
     [self updateUI];
 }
 
 - (IBAction)redealBarButton:(UIBarButtonItem *)sender {
-    self.game = [[CardMatchingGame alloc] initWithCardCount:[self.playingCardViews count]
+    self.game = [[CardMatchingGame alloc] initWithCardCount:[self.cardViews count]
                                               usingDeck:[self createDeck]];
-    self.game.threeCardsMode = NO;
     [self updateUI];
 }
 
+- (CardMatchingGame *)game
+{
+    if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardViews count]
+                                                          usingDeck:[self createDeck]];
+    return _game;
+}
+
+// abstract method. must override this.
 - (void)updateUI
 {
-    
-    for (PlayingCardView *cardView in self.playingCardViews) {
-        int cardViewIndex = [self.playingCardViews indexOfObject:cardView];
-        PlayingCard *card = (PlayingCard *)[self.game cardAtIndex:cardViewIndex];
-        cardView.rank = card.rank;
-        cardView.suit = card.suit;
-        cardView.faceUp = card.isChosen;
-    }
-    
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
-    self.lastConsiderationLabel.text = self.game.lastConsideration;
-    self.lastConsiderationLabel.alpha = 1;
 }
 
 - (NSString *)titleForCard:(Card *)card
