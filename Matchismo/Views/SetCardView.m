@@ -121,6 +121,7 @@
     
     if (self.faceUp) {
         [self drawPips];
+        //[self drawCardData];
     } else {
         [[UIImage imageNamed:@"cardback.png"] drawInRect:self.bounds];
     }
@@ -128,6 +129,32 @@
     [[UIColor blackColor] setStroke];
 //    [roundRect setLineWidth:CARD_STROKE];
     [roundRect stroke];
+}
+
+- (void)drawCardData {
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+
+    UIFont *cornerFont = [UIFont systemFontOfSize:self.bounds.size.width * self.faceCardFontScaleFactor];
+
+    NSString *strForCornerText = [NSString stringWithFormat:@"%@", [self numberAsString:self.number]];
+    strForCornerText = [NSString stringWithFormat:@"%@\n%@", strForCornerText, self.symbol];
+    strForCornerText = [NSString stringWithFormat:@"%@\n%@", strForCornerText, self.shading];
+    strForCornerText = [NSString stringWithFormat:@"%@\n%@", strForCornerText, self.color];
+    
+    NSAttributedString *cornerText = [[NSAttributedString alloc] initWithString:strForCornerText
+                                                 attributes:@{ NSParagraphStyleAttributeName : paragraphStyle, NSFontAttributeName : cornerFont}];
+
+    CGRect textBounds;
+    
+    //draw the attributes in the left top corner
+    textBounds.origin = CGPointMake(CORNER_OFFSET, CORNER_OFFSET);
+    textBounds.size = [cornerText size];
+    [cornerText drawInRect:textBounds];
+    
+    [self pushContextAndRotateUpsideDown];
+    [cornerText drawInRect:textBounds];
+    [self popContext];
 }
 
 - (void)pushContextAndRotateUpsideDown
@@ -161,7 +188,17 @@
                       verticalOffset:(CGFloat)voffset
 {
     CGPoint middle = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
-    NSAttributedString *attributedSuit = [self createAttributedString];
+    CGFloat fontScale = ![self.symbol isEqualToString:@"●"] ? self.faceCardFontScaleFactor : self.faceCardFontScaleFactor + 0.40;
+    UIFont *pipFont = [UIFont systemFontOfSize:self.bounds.size.width * fontScale];
+
+    UIColor *foregroundColor = [self foregroundColorAsUIColor:self.color shading:self.shading];
+    NSAttributedString *attributedSuit =
+        [[NSAttributedString alloc] initWithString:self.symbol
+                                        attributes:
+                                            @{ NSFontAttributeName            : pipFont,
+                                               NSForegroundColorAttributeName : foregroundColor,
+                                               NSStrokeWidthAttributeName     : @-5,
+                                               NSStrokeColorAttributeName     : [self strokeColorAsUIColor:self.color] } ];
     CGSize pipSize = [attributedSuit size];
     CGPoint pipOrigin = CGPointMake(
                                     middle.x-pipSize.width/2.0-hoffset*self.bounds.size.width,
@@ -174,41 +211,28 @@
     }
 }
 
-- (NSAttributedString *)createAttributedString
-{
-    NSMutableDictionary *attributes = [[NSMutableDictionary alloc] init];
-    
-    CGFloat fontScale = ![self.symbol isEqualToString:@"●"] ? self.faceCardFontScaleFactor : self.faceCardFontScaleFactor + 0.40;
-    UIFont *pipFont = [UIFont systemFontOfSize:self.bounds.size.width * fontScale];
-    
-    [attributes setObject:pipFont forKey:NSFontAttributeName];
-    
-    if ([self.color isEqualToString:@"red"])
-        [attributes setObject:[UIColor redColor] forKey:NSForegroundColorAttributeName];
-    if ([self.color isEqualToString:@"green"])
-        [attributes setObject:[UIColor greenColor] forKey:NSForegroundColorAttributeName];
-    if ([self.color isEqualToString:@"purple"])
-        [attributes setObject:[UIColor purpleColor] forKey:NSForegroundColorAttributeName];
-    if ([self.shading isEqualToString:@"solid"])
-        [attributes setObject:@-5 forKey:NSStrokeWidthAttributeName];
-    if ([self.shading isEqualToString:@"striped"])
-        [attributes addEntriesFromDictionary:@{
-                                               NSStrokeWidthAttributeName : @-5,
-                                               NSStrokeColorAttributeName : attributes[NSForegroundColorAttributeName],
-                                               NSForegroundColorAttributeName : [attributes[NSForegroundColorAttributeName] colorWithAlphaComponent:0.1]
-                                               }];
-    if ([self.shading isEqualToString:@"open"])
-        [attributes setObject:@5 forKey:NSStrokeWidthAttributeName];
-    
-    NSAttributedString *attributedSymbol = [[NSAttributedString alloc] initWithString:self.symbol
-                                                                           attributes: attributes];
-    
-    return attributedSymbol;
-}
-
 - (NSString *) numberAsString:(NSUInteger)number
 {
     return @[@"?",@"1",@"2",@"3"][number];
+}
+
+- (UIColor *) foregroundColorAsUIColor:(NSString *)color shading:(NSString *)shading
+{
+    NSDictionary *colors = @{@"red"    : [UIColor redColor],
+                             @"green"  : [UIColor greenColor],
+                             @"purple" : [UIColor purpleColor],
+                             @"open"   : [UIColor whiteColor]};
+    UIColor *c = colors[[shading isEqualToString:@"open"] ? @"open" : color];
+    NSLog(@"%@", shading);
+    return [shading isEqualToString:@"striped"] ? [c colorWithAlphaComponent:0.3] : c;
+}
+
+- (UIColor *) strokeColorAsUIColor:(NSString *)color
+{
+    NSDictionary *colors = @{@"red"    : [UIColor redColor],
+                             @"green"  : [UIColor greenColor],
+                             @"purple" : [UIColor purpleColor]};
+    return colors[color];
 }
 
 @end
