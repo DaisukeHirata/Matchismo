@@ -8,69 +8,14 @@
 
 #import "SetCardView.h"
 
-#define DEFAULT_FACE_CARD_SCALE_FACTOR 0.90
-#define CORNER_RADIUS 12.0
-#define PIP_FONT_SCALE_FACTOR 0.45
-#define CORNER_OFFSET 3.0
-#define CARD_STROKE 7.0
-#define PIP_HOFFSET_PERCENTAGE 0.265
-#define PIP_VOFFSET1_PERCENTAGE 0.140
 #define PIP_VOFFSET2_PERCENTAGE 0.280
-#define PIP_VOFFSET3_PERCENTAGE 0.420
 
 @interface SetCardView()
-@property (nonatomic) CGFloat faceCardScaleFactor;
-@property (nonatomic) CGFloat faceCardFontScaleFactor;
 @end
 
 @implementation SetCardView
 
-#pragma mark - Initialization
-- (void)setup {
-    self.backgroundColor = nil;
-    self.opaque = NO;
-    self.contentMode = UIViewContentModeRedraw;
-}
-
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    [self setup];
-    return self;
-}
-
-- (void)awakeFromNib {
-    [self setup];
-}
-
 #pragma mark - Getters and Setters
-
-@synthesize faceCardScaleFactor = _faceCardScaleFactor;
-@synthesize faceCardFontScaleFactor = _faceCardFontScaleFactor;
-
-- (CGFloat)faceCardScaleFactor
-{
-    if (!_faceCardScaleFactor) _faceCardScaleFactor = DEFAULT_FACE_CARD_SCALE_FACTOR;
-    return _faceCardScaleFactor;
-}
-
-- (void)setFaceCardScaleFactor:(CGFloat)faceCardScaleFactor
-{
-    _faceCardScaleFactor = faceCardScaleFactor;
-    [self setNeedsDisplay];
-}
-
-- (CGFloat)faceCardFontScaleFactor
-{
-    if (!_faceCardFontScaleFactor) _faceCardFontScaleFactor = PIP_FONT_SCALE_FACTOR;
-    return _faceCardFontScaleFactor;
-}
-
-- (void)setFaceCardFontScaleFactor:(CGFloat)faceCardFontScaleFactor
-{
-    _faceCardFontScaleFactor = faceCardFontScaleFactor;
-    [self setNeedsDisplay];
-}
 
 - (void)setSymbol:(NSString *)symbol
 {
@@ -96,20 +41,7 @@
     [self setNeedsDisplay];
 }
 
-- (void)setFaceUp:(BOOL)faceUp
-{
-    _faceUp = faceUp;
-    [self setNeedsDisplay];
-}
-
 #pragma mark - drawing functions
-
-#define CORNER_FONT_STANDARD_HEIGHT 180.0
-#define CORNER_RADIUS 12.0
-
-- (CGFloat)cornerScaleFactor { return self.bounds.size.height / CORNER_FONT_STANDARD_HEIGHT; }
-- (CGFloat)cornerRadius { return CORNER_RADIUS * [self cornerScaleFactor]; }
-- (CGFloat)cornerOffset { return [self cornerRadius] / 3.0; }
 
 - (void)drawRect:(CGRect)rect
 {
@@ -126,21 +58,7 @@
     }
     
     [[UIColor blackColor] setStroke];
-//    [roundRect setLineWidth:CARD_STROKE];
     [roundRect stroke];
-}
-
-- (void)pushContextAndRotateUpsideDown
-{
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSaveGState(context);
-    CGContextTranslateCTM(context, self.bounds.size.width, self.bounds.size.height);
-    CGContextRotateCTM(context, M_PI);
-}
-
-- (void)popContext
-{
-    CGContextRestoreGState(UIGraphicsGetCurrentContext());
 }
 
 - (void)drawPips

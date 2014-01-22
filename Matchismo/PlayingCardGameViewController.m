@@ -19,6 +19,7 @@
 
 - (void)updateUI
 {
+    [super updateUI];
     
     for (PlayingCardView *cardView in self.cardViews) {
         int cardViewIndex = [self.cardViews indexOfObject:cardView];
@@ -27,8 +28,6 @@
         cardView.suit = card.suit;
         cardView.faceUp = card.isChosen;
     }
-    
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
 }
 
 - (CardMatchingGame *)game

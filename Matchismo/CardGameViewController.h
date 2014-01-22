@@ -16,4 +16,5 @@
 @property (nonatomic, strong) CardMatchingGame *game;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 
+- (void)updateUI;
 @end

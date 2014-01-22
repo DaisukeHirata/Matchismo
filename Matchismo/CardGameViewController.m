@@ -8,8 +8,10 @@
 
 #import "CardGameViewController.h"
 #import "HistoryViewController.h"
+#import "Card.h"
 
 @interface CardGameViewController ()
+@property (nonatomic) BOOL animating;
 @end
 
 @implementation CardGameViewController
@@ -50,6 +52,11 @@
     int chosenButtonIndex = [self.cardViews indexOfObject:sender.view];
     NSLog(@"%d tapped", chosenButtonIndex);
     [self.game chooseCardAtIndex:chosenButtonIndex];
+    [UIView transitionWithView:sender.view
+                      duration:0.5
+                       options:UIViewAnimationOptionTransitionFlipFromLeft
+                    animations:nil
+                    completion:^(BOOL finished){ if (finished) nil; }];
     [self updateUI];
 }
 
@@ -66,9 +73,35 @@
     return _game;
 }
 
-// abstract method. must override this.
+// if you override this method you must call this.
 - (void)updateUI
 {
+    
+    for (CardView *cardView in self.cardViews) {
+        int cardViewIndex = [self.cardViews indexOfObject:cardView];
+        Card *card = (Card *)[self.game cardAtIndex:cardViewIndex];
+        if (card.isMatched) {
+            // spin 360 degrees
+            [UIView animateWithDuration:0.2f
+                                  delay:1.0f
+                                options:UIViewAnimationOptionCurveLinear
+                             animations:^{
+                                cardView.transform = CGAffineTransformRotate(cardView.transform, M_PI);
+                             }
+                             completion:^(BOOL finished) {
+                                if (finished) {
+                                    [UIView animateWithDuration:1.0
+                                                          delay:0.5
+                                                        options:UIViewAnimationOptionBeginFromCurrentState
+                                                     animations:^{ cardView.alpha = 0.0; }
+                                                     completion:^(BOOL finished){ if (finished) [cardView removeFromSuperview]; }];
+                                }
+                             }];
+            
+        }
+    }
+    
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
 }
 
 - (NSString *)titleForCard:(Card *)card

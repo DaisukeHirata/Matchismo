@@ -10,4 +10,12 @@
 
 @interface CardView : UIView
 
+@property (nonatomic) BOOL faceUp;
+@property (nonatomic) CGFloat faceCardScaleFactor;
+@property (nonatomic) CGFloat faceCardFontScaleFactor;
+
+- (CGFloat)cornerScaleFactor;
+- (CGFloat)cornerRadius;
+- (CGFloat)cornerOffset;
+
 @end
