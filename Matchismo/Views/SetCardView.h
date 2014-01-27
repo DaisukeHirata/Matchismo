@@ -15,4 +15,6 @@
 @property (strong, nonatomic) NSString *shading;
 @property (strong, nonatomic) NSString *color;
 
+@property (nonatomic) BOOL faceUp;
+
 @end

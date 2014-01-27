@@ -18,7 +18,6 @@
 
 - (void)updateUI
 {
-    [super updateUI];
     
     for (SetCardView *cardView in self.cardViews) {
         int cardViewIndex = [self.cardViews indexOfObject:cardView];
@@ -29,6 +28,8 @@
         cardView.color = card.color;
         cardView.faceUp = card.isChosen;
     }
+    
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
 }
 
 - (CardMatchingGame *)game
