@@ -107,9 +107,6 @@ static const int COST_TO_CHOOSE = 1;
                     self.lastConsideration = [NSString stringWithFormat:@"Matched  %@", consideration];
                 } else {
                     self.score -= MISMATCH_PENALTY;
-                    for (Card *othercard in otherCards) {
-                        othercard.chosen = NO;
-                    }
                     self.lastConsideration = [NSString stringWithFormat:@"%@ does not match", consideration];
                 }
                 [self.considerationHistory addObject:self.lastConsideration];

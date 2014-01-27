@@ -26,7 +26,6 @@
         PlayingCard *card = (PlayingCard *)[self.game cardAtIndex:cardViewIndex];
         cardView.rank = card.rank;
         cardView.suit = card.suit;
-        cardView.faceUp = card.isChosen;
     }
 }
 

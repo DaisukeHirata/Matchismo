@@ -56,7 +56,44 @@
                       duration:0.5
                        options:UIViewAnimationOptionTransitionFlipFromLeft
                     animations:nil
-                    completion:^(BOOL finished){ if (finished) nil; }];
+                    completion:^(BOOL finished){
+                        if (finished) {
+                            int howManyFaceUped = 0;
+                            for (CardView *cardView in self.cardViews) {
+                                int cardViewIndex = [self.cardViews indexOfObject:cardView];
+                                Card *card = (Card *)[self.game cardAtIndex:cardViewIndex];
+                                if (cardView.faceUp && !card.isMatched) howManyFaceUped++;
+                            }
+                            if (( self.game.isThreeCardsMode && howManyFaceUped == 3) ||
+                                (!self.game.isThreeCardsMode && howManyFaceUped == 2) ) {
+                                
+                                for (CardView *cardView in self.cardViews) {
+                                    int cardViewIndex = [self.cardViews indexOfObject:cardView];
+                                    Card *card = (Card *)[self.game cardAtIndex:cardViewIndex];
+                                    if (cardView.faceUp && !card.isMatched) {
+                                        [UIView animateWithDuration:0.1
+                                                              delay:0.5
+                                                            options:UIViewAnimationOptionBeginFromCurrentState
+                                                         animations:^{cardView.alpha = 1.001;}
+                                                         completion:^(BOOL finished){
+                                                             if (finished) {
+                                                                cardView.faceUp = NO;
+                                                                card.chosen = NO;
+                                        [UIView transitionWithView:cardView
+                                                          duration:0.4
+                                                           options:UIViewAnimationOptionTransitionFlipFromLeft
+                                                        animations:^{cardView.alpha = 1.00;}
+                                                        completion:^(BOOL finished){ } ];
+                                                             }
+                                                         }];
+                                        
+                                        
+                                    }
+                                }
+                                
+                            }
+                        }
+                    }];
     [self updateUI];
 }
 
@@ -80,8 +117,9 @@
     for (CardView *cardView in self.cardViews) {
         int cardViewIndex = [self.cardViews indexOfObject:cardView];
         Card *card = (Card *)[self.game cardAtIndex:cardViewIndex];
+        cardView.faceUp = card.isChosen;
         if (card.isMatched) {
-            // spin 360 degrees
+            // spin 180 degrees
             [UIView animateWithDuration:0.2f
                                   delay:1.0f
                                 options:UIViewAnimationOptionCurveLinear
@@ -90,11 +128,15 @@
                              }
                              completion:^(BOOL finished) {
                                 if (finished) {
-                                    [UIView animateWithDuration:1.0
+                                    [UIView animateWithDuration:0.5
                                                           delay:0.5
                                                         options:UIViewAnimationOptionBeginFromCurrentState
                                                      animations:^{ cardView.alpha = 0.0; }
-                                                     completion:^(BOOL finished){ if (finished) [cardView removeFromSuperview]; }];
+                                                     completion:^(BOOL finished){
+                                                         if (finished) {
+                                                             [cardView removeFromSuperview];
+                                                         }
+                                                     }];
                                 }
                              }];
             

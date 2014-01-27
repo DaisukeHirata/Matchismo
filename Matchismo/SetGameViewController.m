@@ -27,7 +27,6 @@
         cardView.symbol = card.symbol;
         cardView.shading = card.shading;
         cardView.color = card.color;
-        cardView.faceUp = card.isChosen;
     }
 }
 
